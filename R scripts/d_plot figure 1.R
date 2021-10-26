@@ -75,7 +75,7 @@ bar <- ggplot(agg3, aes(x=group, y=b33/1000, fill=group)) +
   theme_classic() +
   theme(legend.position="none", axis.line.x = element_line("transparent")) +
   xlab("") +
-  ylab("denning habitat [1000 sqkm]") +
+  ylab(expression(denning~habitat~"[ 1000"~km^2~"]")) +
   scale_y_continuous(expand = c(0, 0)) +
   
   geom_errorbar(aes(ymin=(b25)/1000, ymax=(b50)/1000), width=.2,

@@ -8,7 +8,7 @@ coast.id <- data.frame(coastp3)
 
 load("generated data\\DEM habitat\\DEM den habitat data small polygons without inner buffer.RData")
 agg = aggregate(dat4[,c(12:28)],
-                by = list(topo$new.id),
+                by = list(dat4$new.id),
                 FUN = function(x) sum(x,na.rm=T))
 names(agg)[1] <- "new.id"
 agg2 <- merge(agg, coast.id, by="new.id",all.x=T)
@@ -321,8 +321,8 @@ t <- tapply(dd$b33,dd$cut2090,sum)
 for(yy in as.numeric(names(t))) mat[yy,7] <- t[names(t)==as.character(yy)]
 
 par(mar=c(2,5,0,0))
-bp <- barplot(mat/1000,col=c("darkolivegreen","gold",2),ylab="denning habitat [1000 sqkm]",
-              border=c("white"),las=1, density = c(rep(-1,12),rep(20,6)),yaxt="n",ylim=c(0,21),lwd=0.01)
+bp <- barplot(mat/1000,col=c("darkolivegreen","gold",2),ylab=expression(denning~habitat~"[ 1000"~km^2~"]"),
+              border="white",las=1, density = c(rep(-1,12),rep(20,6)),yaxt="n",ylim=c(0,21),lwd=0.01)
 axis(2, at=seq(0,20,3),las=1)
 axis(1, at=bp,labels=c("1980's","1990's","2000's","2010's","","2050's","2090's"),tick=F)
 lines(c(0.2,4.8),c(19.5,19.5))
@@ -381,10 +381,12 @@ for(i in 1:6){
   plot(cp2, col=c("darkolivegreen","gold",2,2)[cp2$date], lwd=0.1,
        border=c("darkolivegreen","gold",2,1)[cp2$date])
   box()
-  mtext(title, side = 1 , line = -4)
+  mtext(title, side = 1 , line = -7)
 }
 mtext("observed", side = 3, line = -1.5,  outer =T,cex=1.6)
 mtext("predicted",  side = 3, line = -46, outer =T,cex=1.6)
+legend("bottomleft", legend=c("in time (\u22641 Dec)","maybe in time (\u22641 Jan)","not in time (>1 Jan)"),pch=22,
+       col=c("darkolivegreen","gold",2),pt.bg=c("darkolivegreen","gold",2),bg="transparent",box.col="transparent")
 dev.off()
 
 
