@@ -2,9 +2,13 @@ library(sp)
 library(sf)
 library(Hmisc)
 library(RColorBrewer)
+library(graticule)
+library(raster)
+library(spex)
 
 load("generated data\\Barents Sea islands split into 200km coastline polygons 60km inland buffer more than 1sqkm.RData")
 coast.id <- data.frame(coastp3)
+
 
 load("generated data\\DEM habitat\\DEM den habitat data small polygons without inner buffer.RData")
 agg = aggregate(dat4[,c(12:28)],
@@ -339,6 +343,11 @@ dev.off()
 proj.laea30 <- CRS("+proj=laea +lat_0=90 +lon_0=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs")
 coastp30 <- spTransform(coastp3,proj.laea30)
 
+lons <- seq(10, 70, 10)
+lats <- seq(74, 82, 2)
+pex <- spex(cp)
+g <- st_graticule(st_as_sf(pex), lat = lats, lon = lons)
+
 cp <- coastp30[!is.na(coastp30$group),]
 cp <- cp[cp$id3 %in% dd$id,]
 cp <- cp[order(cp$new.id),]
@@ -346,47 +355,59 @@ ddd <- dd[order(dd$new.id),]
 ddd <- ddd[ddd$new.id %in% cp$new.id,]
 ddd <- ddd[order(ddd$new.id),]
 
-png("figures/decadel available habitat + gcm models v3.png",width=15,height=23,units="cm",res=700)
+png("figures/decadel available habitat + gcm models v4.png",width=15,height=23,units="cm",res=700)
 par(mfrow=c(3,2),oma=c(0,0,2,0))
-par(mar=c(0.1,0.1,2,0.1))
+par(mar=c(0.1,1,2,0.1))
+par(xpd = NA)
 for(i in 1:6){
   if(i==1) {
     cp$date <- ddd$cut80
-    title <- "1980's"
+    title <- "1980"
   }
   if(i==2) {
     cp$date <- ddd$cut90
-    title <- "1990's"
+    title <- "1990"
   }
   if(i==3) {
     cp$date <- ddd$cut00
-    title <- "2000's"
+    title <- "2000"
   }
   if(i==4) {
     cp$date <- ddd$cut10
-    title <- "2010's"
+    title <- "2010"
   }
   if(i==5) {
     cp$date <- ddd$cut2050
-    title <- "2050's"
+    title <- "2050"
   }
   if(i==6) {
     cp$date <- ddd$cut2090
-    title <- "2090's"
+    title <- "2090"
   }
   
   cp2 <- cp[cp$area > 1e+06,]
-  if(i == 3) par(mar=c( 2,0.1,0.1,0.1))
-  if(i == 5) par(mar=c( 0.1,0.1,2,0.1))
+  if(i == 3) par(mar=c(2,  1,0.3,0.1))
+  if(i == 5) par(mar=c(0.1,1,2,  0.1))
+  plot(cp2, lwd=0.5, border=grey(0.4))
+  # plot(pex,add=T)
+  plot(st_geometry(g), add=T, lwd=0.5, col=grey(0.6))
+  invisible(lapply(seq_len(nrow(g)), function(i) {
+    if (g$type[i] == "N" && g$x_start[i] - min(g$x_start) < 1000)
+      text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]),
+           pos = 2, cex = .7, col = grey(0.6))
+    if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
+      text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]),
+           pos = 3, cex = .7, col = grey(0.6))
+  }))
   plot(cp2, col=c("darkolivegreen","gold",2,2)[cp2$date], lwd=0.1,
-       border=c("darkolivegreen","gold",2,1)[cp2$date])
-  box()
-  mtext(title, side = 1 , line = -7)
+       border=c("darkolivegreen","gold",2,1)[cp2$date],add=T)
+  # box()
+  mtext(title, side = 1 , line = -7, cex = 1.5)
 }
 mtext("observed", side = 3, line = -1.5,  outer =T,cex=1.6)
 mtext("predicted",  side = 3, line = -46, outer =T,cex=1.6)
-legend("bottomleft", legend=c("in time (\u22641 Dec)","maybe in time (\u22641 Jan)","not in time (>1 Jan)"),pch=22,
-       col=c("darkolivegreen","gold",2),pt.bg=c("darkolivegreen","gold",2),bg="transparent",box.col="transparent")
+legend("bottomleft", legend=c("in time (\u22641 Dec)","potentially in time (\u22641 Jan)","not in time (>1 Jan)"),pch=22,
+       col=c("darkolivegreen","gold",2),pt.bg=c("darkolivegreen","gold",2),bg="white",box.col="transparent")
 dev.off()
 
 

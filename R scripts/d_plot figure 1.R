@@ -99,6 +99,7 @@ mainmap <- tm_shape(map_frame) +
   
   tm_grid(col=grey(0.7), tick=F, x = seq(0, 100, by = 10), y = seq(70,90,4), projection=4326, 
           labels.cardinal = T, labels.format = list(suffix = intToUtf8(176)), labels.rot = c(0,90),lwd=0.6) +
+  
   tm_shape(coastp30) +
   tm_fill(col = "group", palette = cols[c(1:3,5,4)], title = "Island group", legend.show = F) +
   tm_borders(col=1) +
@@ -109,7 +110,7 @@ mainmap <- tm_shape(map_frame) +
   tm_layout(outer.margins=c(0.02, 0.02, 0.02, 0.26), legend.show = F)
 
 inset <- tm_shape(pb_sub) +
-  tm_borders(col=grey(0.8),lwd=0.5) +
+  tm_borders(col=grey(0.8),lwd=1) +
   
   tm_shape(pb_bs) +
   tm_fill(col='beige') +
@@ -120,15 +121,18 @@ inset <- tm_shape(pb_sub) +
   tm_shape(world_crop) +
   tm_fill(col=grey(0.8)) +
   
+  tm_grid(col=grey(0.6), tick=F, x = seq(-180, 180, by = 90), y = seq(40,80,20), projection=4326, 
+          labels.cardinal = F, labels.show = F, lwd=0.4) +
+  
   tm_shape(pb_sub) +
   tm_borders(col=grey(0.4),lwd=1) +
   
   tm_layout(frame = T, bg.color = "white")
 
 
-png("figures\\Polar bear Barents Sea divided in groups smaller polygons without inland buffer tmap.png",width=30,height=20,units="cm",res=700)
+png("figures\\Polar bear Barents Sea divided in groups smaller polygons without inland buffer tmap2.png",width=30,height=20,units="cm",res=700)
 mainmap
-print(inset, vp = grid::viewport(0.12, 0.85, width = 0.32, height = 0.28))
+print(inset, vp = grid::viewport(0.1, 0.83, width = 0.4, height = 0.32))
 print(bar,   vp = grid::viewport(0.85, 0.5, width = 0.2, height = 1))
 dev.off()
   
