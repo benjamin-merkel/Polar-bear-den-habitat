@@ -130,7 +130,7 @@ inset <- tm_shape(pb_sub) +
   tm_layout(frame = T, bg.color = "white")
 
 
-png("figures\\Polar bear Barents Sea divided in groups smaller polygons without inland buffer tmap2.png",width=30,height=20,units="cm",res=700)
+jpeg("figures\\figure 1.jpeg",width=30,height=20,units="cm",res=700)
 mainmap
 print(inset, vp = grid::viewport(0.1, 0.83, width = 0.4, height = 0.32))
 print(bar,   vp = grid::viewport(0.85, 0.5, width = 0.2, height = 1))

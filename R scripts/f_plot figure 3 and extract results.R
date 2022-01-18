@@ -68,7 +68,7 @@ cols <- data.frame(col  =c(cols[1], cols[2], grey(0.6), cols[5], cols[6]),
                    n=c(31,59,74,58,36))
 
 
-png(paste0("figures/GCM/all island groupds weighted v3.png"),width=18,height=40,units="cm",res=700)
+jpeg(paste0("figures/figure 3.jpeg"),width=18,height=40,units="cm",res=700)
 layout(matrix(c(1:10), ncol=1, byrow = F), heights = rep(c(1,3),5))
 par(oma=c(2,0,1.3,1.2))
 for(gr in c("WSVB","ESVB","FJL","NNZ","SNZ")) {

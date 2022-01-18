@@ -307,7 +307,7 @@ dev.off()
 
 
 
-png("figures/decadel change in denning habitat + gcm models V4.png",width=15,height=20,units="cm",res=700)
+jpeg("figures/figure 2.jpeg",width=15,height=20,units="cm",res=700)
 
 mat <- matrix(0,nrow=3,ncol=7)
 t <- tapply(dd$b33,dd$cut80,sum)
@@ -355,7 +355,7 @@ ddd <- dd[order(dd$new.id),]
 ddd <- ddd[ddd$new.id %in% cp$new.id,]
 ddd <- ddd[order(ddd$new.id),]
 
-png("figures/decadel available habitat + gcm models v4.png",width=15,height=23,units="cm",res=700)
+jpeg("figures/figure 4.jpeg",width=15,height=23,units="cm",res=700)
 par(mfrow=c(3,2),oma=c(0,0,2,0))
 par(mar=c(0.1,1,2,0.1))
 par(xpd = NA)
