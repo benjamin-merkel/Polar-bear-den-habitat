@@ -4,14 +4,20 @@ library(sf)
 library(stringr)
 
 load("generated data\\Barents Sea islands split into 200km coastline polygons 22km inland buffer more than 1sqkm.RData")
+
 coast.id <- data.frame(coastp3)
 coast.id <- coast.id[!is.na(coast.id$group),]
+
+load("generated data\\coast complex buffer 2.RData")
+buff_cen <- st_centroid(st_as_sf(buff))
+buff_cen <- st_transform(buff_cen, 4326)
+
 
 # models with best historical freeze up dynamics according to Smith 2020
 models <- c("BCC-CSM2-MR","NorESM2-LM","EC-Earth3","CanESM5",
             "CNRM-ESM2-1","ACCESS-CM2","NorESM2-MM")   # "BCC-ESMI"
 
-mmm=5
+mmm=7
 
 for(mmm in 1:7){
   model <- models[mmm]
